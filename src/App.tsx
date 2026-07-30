@@ -4,66 +4,55 @@ import { ShaderBackground } from './components/ShaderBackground';
 import { TerminalOverlay } from './components/TerminalOverlay';
 import { TopNavBar } from './components/TopNavBar';
 import { HeroSection } from './components/HeroSection';
-import { BentoSection } from './components/BentoSection';
+import { ClientLogosBar } from './components/ClientLogosBar';
 import { ServicesSection } from './components/ServicesSection';
+import { PortfolioSection } from './components/PortfolioSection';
+import { TeamSection } from './components/TeamSection';
+import { ProcessSection } from './components/ProcessSection';
+import { TestimonialsSection } from './components/TestimonialsSection';
 import { TechStatsSection } from './components/TechStatsSection';
 import { NewsletterSection } from './components/NewsletterSection';
 import { Footer } from './components/Footer';
+import { CostEstimatorModal } from './components/CostEstimatorModal';
+import { AiScoutModal } from './components/AiScoutModal';
 import { ConsciousnessSyncModal } from './components/ConsciousnessSyncModal';
-import { EngramsModal } from './components/EngramsModal';
 
 export default function App() {
-  // Application State
   const [booting, setBooting] = useState(true);
-  const [activeTab, setActiveTab] = useState<NavTab>('SYSTEMS');
+  const [activeTab, setActiveTab] = useState<NavTab>('SERVICES');
   const [terminalModalOpen, setTerminalModalOpen] = useState(false);
+  const [estimatorModalOpen, setEstimatorModalOpen] = useState(false);
+  const [aiScoutModalOpen, setAiScoutModalOpen] = useState(false);
   const [syncModalOpen, setSyncModalOpen] = useState(false);
-  const [engramsModalOpen, setEngramsModalOpen] = useState(false);
-  const [selectedEngramId, setSelectedEngramId] = useState<string | null>(null);
 
-  // System Status
   const [systemStatus, setSystemStatus] = useState<SystemStatus>({
     uptime: '99.9%',
-    thetaLatency: '0.4ms',
-    neuralScale: '128B',
-    dataPoints: '128TB',
+    thetaLatency: '0.18s',
+    activeClients: 18,
+    projectsCompleted: 64,
     coord: '35.6895° N, 139.6917° E',
     frequency: 432,
     quantumLocked: true,
-    systemLoad: '0.00042%',
+    systemLoad: '0.00018%',
   });
 
-  // Handle Tab Change with auto scroll to appropriate section
   const handleTabChange = (tab: NavTab) => {
     setActiveTab(tab);
-    if (tab === 'ENGRAMS') {
-      setEngramsModalOpen(true);
-    } else if (tab === 'TRANSCEND') {
-      setSyncModalOpen(true);
-    } else if (tab === 'SERVICES') {
-      const el = document.getElementById('services-catalog-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else if (tab === 'SYSTEMS' || tab === 'STRATEGY') {
-      const el = document.getElementById('bento-grid-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+    if (tab === 'SERVICES') {
+      const el = document.getElementById('agency-services-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (tab === 'WORK') {
+      const el = document.getElementById('agency-portfolio-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (tab === 'CALCULATOR') {
+      setEstimatorModalOpen(true);
+    } else if (tab === 'TEAM') {
+      const el = document.getElementById('agency-team-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else if (tab === 'PROCESS') {
+      const el = document.getElementById('agency-process-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleOpenEngramDetail = (id: string) => {
-    setSelectedEngramId(id);
-    setEngramsModalOpen(true);
-  };
-
-  const handleFrequencyChange = (freq: number) => {
-    setSystemStatus((prev) => ({ ...prev, frequency: freq }));
-  };
-
-  const handleToggleLock = () => {
-    setSystemStatus((prev) => ({ ...prev, quantumLocked: !prev.quantumLocked }));
   };
 
   return (
@@ -80,20 +69,17 @@ export default function App() {
         onBootComplete={() => setBooting(false)}
         isOpenModal={terminalModalOpen}
         onCloseModal={() => setTerminalModalOpen(false)}
-        onTriggerSync={() => {
-          setTerminalModalOpen(false);
-          setSyncModalOpen(true);
-        }}
       />
 
-      {/* Main Site Container (Fades in once boot sequence completes) */}
+      {/* Main Site Container */}
       <div className={`transition-opacity duration-1000 ${booting ? 'opacity-0' : 'opacity-100'}`}>
         {/* Navigation Bar */}
         <TopNavBar
           activeTab={activeTab}
           onSelectTab={handleTabChange}
           onOpenTerminal={() => setTerminalModalOpen(true)}
-          onInitiateAction={() => setSyncModalOpen(true)}
+          onOpenAiScout={() => setAiScoutModalOpen(true)}
+          onOpenEstimator={() => setEstimatorModalOpen(true)}
         />
 
         {/* Main Content Area */}
@@ -101,52 +87,76 @@ export default function App() {
           {/* Hero Section */}
           <HeroSection
             systemStatus={systemStatus}
-            onSyncClick={() => setSyncModalOpen(true)}
-            onViewArchiveClick={() => setEngramsModalOpen(true)}
+            onExploreServices={() => {
+              const el = document.getElementById('agency-services-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth' });
+            }}
+            onOpenEstimator={() => setEstimatorModalOpen(true)}
+            onOpenAiScout={() => setAiScoutModalOpen(true)}
           />
 
-          {/* Bento Grid Section */}
-          <div id="bento-grid-section">
-            <BentoSection
-              onSelectEngram={handleOpenEngramDetail}
-              onExploreSystems={() => setEngramsModalOpen(true)}
-            />
+          {/* Social Proof Client Logos & Guarantee Bar */}
+          <ClientLogosBar />
+
+          {/* Core Services Section ($599+) */}
+          <div id="agency-services-section">
+            <ServicesSection onOpenEstimator={() => setEstimatorModalOpen(true)} />
           </div>
 
-          {/* Services Section ($599 starting price high-fidelity web dev & AI architecture) */}
-          <div id="services-catalog-section">
-            <ServicesSection />
+          {/* Portfolio & Case Studies Section */}
+          <div id="agency-portfolio-section">
+            <PortfolioSection />
           </div>
 
-          {/* Tech Stats Section */}
+          {/* Agency Team & Human Architects Section */}
+          <div id="agency-team-section">
+            <TeamSection />
+          </div>
+
+          {/* 4-Sprint Process Section */}
+          <div id="agency-process-section">
+            <ProcessSection />
+          </div>
+
+          {/* Verified Client Reviews & Testimonials */}
+          <TestimonialsSection />
+
+          {/* Performance Stats */}
           <TechStatsSection />
 
-          {/* Newsletter Section */}
+          {/* Free Discovery Call Consultation Form */}
           <NewsletterSection />
         </main>
 
         {/* Footer */}
         <Footer
+          onSelectTab={handleTabChange}
+          onOpenEstimator={() => setEstimatorModalOpen(true)}
+          onOpenAiScout={() => setAiScoutModalOpen(true)}
           onOpenTerminal={() => setTerminalModalOpen(true)}
-          onOpenEngrams={() => setEngramsModalOpen(true)}
-          onOpenSync={() => setSyncModalOpen(true)}
         />
 
-        {/* Consciousness Sync Modal */}
+        {/* Cost Estimator Quote Modal */}
+        <CostEstimatorModal
+          isOpen={estimatorModalOpen}
+          onClose={() => setEstimatorModalOpen(false)}
+        />
+
+        {/* AI Project Scout Modal */}
+        <AiScoutModal
+          isOpen={aiScoutModalOpen}
+          onClose={() => setAiScoutModalOpen(false)}
+          onOpenProposal={() => setEstimatorModalOpen(true)}
+        />
+
+        {/* Audio Feedback Demo Modal */}
         <ConsciousnessSyncModal
           isOpen={syncModalOpen}
           onClose={() => setSyncModalOpen(false)}
           frequency={systemStatus.frequency}
-          onFrequencyChange={handleFrequencyChange}
+          onFrequencyChange={(freq) => setSystemStatus((prev) => ({ ...prev, frequency: freq }))}
           isLocked={systemStatus.quantumLocked}
-          onToggleLock={handleToggleLock}
-        />
-
-        {/* Engrams Memory Archive Modal */}
-        <EngramsModal
-          isOpen={engramsModalOpen}
-          onClose={() => setEngramsModalOpen(false)}
-          selectedEngramId={selectedEngramId}
+          onToggleLock={() => setSystemStatus((prev) => ({ ...prev, quantumLocked: !prev.quantumLocked }))}
         />
       </div>
     </div>

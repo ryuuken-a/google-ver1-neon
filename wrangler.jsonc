@@ -1,7 +1,0 @@
-{
-  "name": "google-ver1-neon",
-  "compatibility_date": "2026-07-30",
-  "assets": {
-    "directory": "./dist"
-  }
-}

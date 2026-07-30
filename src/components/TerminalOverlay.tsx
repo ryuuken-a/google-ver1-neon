@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TerminalLog } from '../types';
 import { INITIAL_LOADING_LINES } from '../data/mockData';
-import { X, Terminal as TerminalIcon, CornerDownLeft, Sparkles, RefreshCw } from 'lucide-react';
+import { X, Terminal as TerminalIcon, CornerDownLeft, RefreshCw } from 'lucide-react';
 
 interface TerminalOverlayProps {
   booting: boolean;
@@ -18,21 +18,19 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
   onCloseModal,
   onTriggerSync,
 }) => {
-  // Boot Sequence typewriter state
   const [bootLines, setBootLines] = useState<string[]>([]);
   const [bootDone, setBootDone] = useState(false);
 
-  // Interactive CLI Modal state
   const [logs, setLogs] = useState<TerminalLog[]>([
     {
       id: 'init-1',
-      text: 'NEONTOMYEVANGELION SYSTEM CLI v8.0.42 [QUANTUM_LOCKED]',
+      text: 'NEONTOMY EVANGELION // DIGITAL AGENCY CLI [NEONTOMYEVANGELION.SPACE]',
       type: 'info',
       timestamp: new Date().toLocaleTimeString(),
     },
     {
       id: 'init-2',
-      text: 'Type "help" to view available system protocols.',
+      text: 'Type "help" to list available diagnostic commands.',
       type: 'info',
       timestamp: new Date().toLocaleTimeString(),
     },
@@ -40,7 +38,6 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
   const [inputVal, setInputVal] = useState('');
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
-  // Boot sequence logic
   useEffect(() => {
     if (!booting || bootDone) return;
 
@@ -50,13 +47,13 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
         if (!isMounted) break;
         const line = INITIAL_LOADING_LINES[i];
         setBootLines((prev) => [...prev, line]);
-        await new Promise((r) => setTimeout(r, 180));
+        await new Promise((r) => setTimeout(r, 150));
       }
       if (isMounted) {
         setBootDone(true);
         setTimeout(() => {
           onBootComplete();
-        }, 800);
+        }, 600);
       }
     };
 
@@ -67,7 +64,6 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
     };
   }, [booting, bootDone, onBootComplete]);
 
-  // Scroll to bottom on log change
   useEffect(() => {
     if (isOpenModal) {
       bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -93,7 +89,7 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
       responseLogs = [
         {
           id: Date.now() + '-1',
-          text: 'AVAILABLE PROTOCOLS:\n - status    : Display live neural infrastructure telemetry\n - sync      : Execute Quantum Consciousness Alignment\n - services  : Query high-fidelity spatial web & AI development packages\n - engrams   : Retrieve active memory logs and case files\n - clear     : Purge current terminal screen buffer\n - audit     : Run quantum latency & security diagnostics\n - exit      : Close interactive terminal modal',
+          text: 'AVAILABLE AGENCY CLI COMMANDS:\n - status     : Display live infrastructure telemetry & health\n - services   : Query active agency packages & starting pricing\n - team       : View senior engineering team roster\n - audit      : Run Core Web Vitals & latency check\n - clear      : Clear terminal screen output\n - exit       : Close CLI console',
           type: 'info',
           timestamp: new Date().toLocaleTimeString(),
         },
@@ -102,36 +98,35 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
       responseLogs = [
         {
           id: Date.now() + '-1',
-          text: 'SYS_STATUS: OPTIMAL_TRANSCENDENCE\nUPTIME: 99.9%\nLATENCY: 0.0004s THETA_RESPONSE\nFREQUENCY: 432 HZ // QUANTUM_LOCKED\nLOAD: 0.00042%',
+          text: 'DOMAIN: https://neontomyevangelion.space\nAGENCY_STATUS: ACTIVE & ONLINE\nCORE WEB VITALS: 100/100 LCP SCORE\nAVG LATENCY: 0.18s\nSOURCE CODE OWNERSHIP: 100% INCLUDED',
           type: 'success',
           timestamp: new Date().toLocaleTimeString(),
         },
       ];
-    } else if (lower === 'sync') {
-      responseLogs = [
-        {
-          id: Date.now() + '-1',
-          text: 'INITIATING CONSCIOUSNESS HARMONIC RESONANCE...',
-          type: 'warn',
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ];
-      if (onTriggerSync) onTriggerSync();
     } else if (lower === 'services') {
       responseLogs = [
         {
           id: Date.now() + '-1',
-          text: 'CATALOG_FETCH:\n 01. High-Fidelity Web Dev (Starting from $599)\n 02. AI Systems Architecture (Starting from $1,299)\n 03. Strategic Neural Marketing (Starting from $899)',
+          text: 'AGENCY PACKAGES:\n 01. High-Fidelity Web App ($599 starting)\n 02. Custom AI Systems & Gemini Agents ($1,299 starting)\n 03. Cyberpunk Brand Identity System ($899 starting)',
           type: 'info',
           timestamp: new Date().toLocaleTimeString(),
         },
       ];
-    } else if (lower === 'engrams') {
+    } else if (lower === 'team') {
       responseLogs = [
         {
           id: Date.now() + '-1',
-          text: 'ENGRAM_01: NEURAL_TRANSCENDENCE_KERNEL [99.98% STABILITY]\nENGRAM_02: QUANTUM_CONSCIOUSNESS_SYNC [432 Hz HARMONIC]\nENGRAM_03: PREDICTIVE_RESONANCE_MATRIX [14.2M IMPRESSIONS]',
+          text: 'LEADERSHIP:\n - Kaelen Vance (Principal Web Architect - Ex-Senior Frontend)\n - Dr. Evelyn Ren (Head of AI Research - PhD Machine Learning)\n - Soren Takahashi (Creative Director - Spatial UI/UX)\n - Mira Chen (Lead Cloud DevOps & Security)',
           type: 'info',
+          timestamp: new Date().toLocaleTimeString(),
+        },
+      ];
+    } else if (lower === 'audit') {
+      responseLogs = [
+        {
+          id: Date.now() + '-1',
+          text: 'DIAGNOSTIC AUDIT: Zero memory leaks detected. WebGL canvas 60fps stable. React 19 hydrated.',
+          type: 'success',
           timestamp: new Date().toLocaleTimeString(),
         },
       ];
@@ -139,15 +134,6 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
       setLogs([]);
       setInputVal('');
       return;
-    } else if (lower === 'audit') {
-      responseLogs = [
-        {
-          id: Date.now() + '-1',
-          text: 'DIAGNOSTIC COMPLETE: Zero memory leaks detected. AES-8192 encryption active. Shader buffers 100% stable.',
-          type: 'success',
-          timestamp: new Date().toLocaleTimeString(),
-        },
-      ];
     } else if (lower === 'exit') {
       onCloseModal();
       setInputVal('');
@@ -156,7 +142,7 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
       responseLogs = [
         {
           id: Date.now() + '-1',
-          text: `Command not recognized: "${cmd}". Type "help" for a list of available protocols.`,
+          text: `Command not recognized: "${cmd}". Type "help" for a list of available commands.`,
           type: 'error',
           timestamp: new Date().toLocaleTimeString(),
         },
@@ -167,7 +153,6 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
     setInputVal('');
   };
 
-  // If initial booting typewriter screen is active
   if (booting) {
     return (
       <div className="fixed inset-0 bg-black z-[999] flex flex-col p-8 font-mono text-[#f0dbff] overflow-hidden select-none">
@@ -181,12 +166,12 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
             </p>
           ))}
           <div className="pt-8 flex justify-between items-center text-xs text-[#cfc2d6]/60">
-            <span>PRESS ANYWHERE TO SKIP SEQUENCE</span>
+            <span>ENTER AGENCY WORKSPACE...</span>
             <button
               onClick={onBootComplete}
-              className="octagonal bg-[#ddb7ff] text-[#490080] px-4 py-1 text-xs font-bold hover:shadow-[0_0_15px_white] transition-all"
+              className="octagonal bg-[#ddb7ff] text-[#490080] px-4 py-1.5 text-xs font-bold hover:shadow-[0_0_15px_white] transition-all"
             >
-              SKIP_BOOT
+              SKIP BOOT
             </button>
           </div>
         </div>
@@ -194,24 +179,23 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
     );
   }
 
-  // Interactive CLI Modal
   if (!isOpenModal) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in">
-      <div className="w-full max-w-4xl bg-[#0c0f0f] border border-[#ddb7ff]/30 rounded-lg shadow-[0_0_30px_rgba(168,85,247,0.3)] flex flex-col h-[80vh] overflow-hidden">
+    <div className="fixed inset-0 z-[180] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fade-in">
+      <div className="w-full max-w-4xl bg-[#0c0f0f] border border-[#ddb7ff]/30 rounded-lg shadow-[0_0_30px_rgba(168,85,247,0.3)] flex flex-col h-[75vh] overflow-hidden">
         {/* Modal Header */}
         <div className="flex items-center justify-between px-6 py-4 bg-[#1a1c1c] border-b border-white/10">
           <div className="flex items-center gap-3">
             <TerminalIcon className="w-5 h-5 text-[#ddb7ff]" />
             <span className="font-mono text-xs md:text-sm font-bold text-[#ddb7ff] tracking-widest uppercase">
-              NEONTOMY // CLI_SYSTEM_TERMINAL
+              NEONTOMY // DEVELOPER DIAGNOSTIC CLI
             </span>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setLogs([])}
-              title="Clear terminal screen"
+              title="Clear terminal output"
               className="p-1 text-[#cfc2d6]/70 hover:text-[#ddb7ff] hover:bg-white/5 rounded transition-all"
             >
               <RefreshCw className="w-4 h-4" />
@@ -262,7 +246,7 @@ export const TerminalOverlay: React.FC<TerminalOverlayProps> = ({
             type="text"
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
-            placeholder="Type 'help', 'status', 'services', 'sync', 'engrams', 'clear'..."
+            placeholder="Type 'help', 'status', 'services', 'team', 'audit', 'clear'..."
             className="flex-1 bg-transparent font-mono text-xs md:text-sm text-[#ddb7ff] placeholder:text-white/20 focus:outline-none"
             autoFocus
           />

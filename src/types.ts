@@ -1,4 +1,4 @@
-export type NavTab = 'SYSTEMS' | 'STRATEGY' | 'ENGRAMS' | 'TRANSCEND' | 'SERVICES';
+export type NavTab = 'SERVICES' | 'WORK' | 'CALCULATOR' | 'TEAM' | 'PROCESS' | 'SCOUT';
 
 export interface ServiceItem {
   id: string;
@@ -10,26 +10,57 @@ export interface ServiceItem {
   highlighted?: boolean;
   features: string[];
   icon: string;
+  timeline: string;
 }
 
-export interface EngramItem {
+export interface CaseStudy {
   id: string;
-  code: string;
+  clientName: string;
+  industry: string;
   title: string;
-  category: string;
-  date: string;
-  latency: string;
-  description: string;
-  metrics: { label: string; value: string }[];
-  tags: string[];
+  summary: string;
+  challenge: string;
+  solution: string;
+  deliverables: string[];
+  results: { label: string; value: string }[];
+  techStack: string[];
+  imageUrl: string;
+  quote?: {
+    text: string;
+    author: string;
+    role: string;
+  };
 }
 
-export interface SystemMetric {
-  label: string;
-  value: string;
-  subtext: string;
-  unit?: string;
-  status: 'OPTIMAL' | 'SYNCED' | 'ACTIVE' | 'ENCRYPTED';
+export interface TeamMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  experience: string;
+  specialties: string[];
+  avatarUrl: string;
+  location: string;
+}
+
+export interface Testimonial {
+  id: string;
+  author: string;
+  role: string;
+  company: string;
+  avatarUrl: string;
+  content: string;
+  rating: number;
+  projectType: string;
+}
+
+export interface EstimatorFeature {
+  id: string;
+  title: string;
+  description: string;
+  category: 'WEB' | 'AI' | 'BRAND' | 'INFRA';
+  price: number;
+  days: number;
 }
 
 export interface TerminalLog {
@@ -42,10 +73,10 @@ export interface TerminalLog {
 export interface SystemStatus {
   uptime: string;
   thetaLatency: string;
-  neuralScale: string;
-  dataPoints: string;
+  activeClients: number;
+  projectsCompleted: number;
   coord: string;
-  frequency: number; // e.g. 432
+  frequency: number;
   quantumLocked: boolean;
   systemLoad: string;
 }
